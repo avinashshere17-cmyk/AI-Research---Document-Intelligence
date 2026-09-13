@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 # Chat history
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
@@ -11,9 +12,9 @@ from src.retriever import search_similar_chunks
 from src.llm import ask_llm
 
 
-# -------------------------------------------------
+
 # PAGE CONFIGURATION
-# -------------------------------------------------
+
 
 st.set_page_config(
     page_title="AI Research & Document Intelligence",
@@ -23,9 +24,9 @@ st.set_page_config(
 )
 
 
-# -------------------------------------------------
+
 # CUSTOM CSS
-# -------------------------------------------------
+
 
 st.markdown("""
 <style>
@@ -71,9 +72,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# -------------------------------------------------
+
 # SIDEBAR
-# -------------------------------------------------
+
 
 with st.sidebar:
     st.markdown("### 👨‍💻 Built by")
@@ -112,9 +113,9 @@ with st.sidebar:
     st.caption("Powered by AI + RAG")
 
 
-# -------------------------------------------------
+
 # MAIN HEADER
-# -------------------------------------------------
+
 
 st.markdown(
     '<div class="title">📚 AI Research & Document Intelligence</div>',
@@ -129,9 +130,9 @@ st.markdown(
 )
 
 
-# -------------------------------------------------
+
 # UPLOAD MULTIPLE PDF DOCUMENTS
-# -------------------------------------------------
+
 
 st.subheader("📄 Upload Research Papers")
 
@@ -158,6 +159,7 @@ if uploaded_files:
             for file in uploaded_files:
 
                 # Save uploaded PDF temporarily
+                os.makedirs("data/papers", exist_ok=True)
                 temp_path = f"data/papers/{file.name}"
 
                 with open(temp_path, "wb") as f:
@@ -208,9 +210,9 @@ if "documents_processed" not in st.session_state:
 chunks = st.session_state["chunks"]
 index = st.session_state["index"]
 
-# -------------------------------------------------
+
 # DOCUMENT INFORMATION
-# -------------------------------------------------
+
 
 col1, col2, col3 = st.columns(3)
 
@@ -226,9 +228,9 @@ with col3:
 st.markdown("")
 
 
-# -------------------------------------------------
+
 # QUESTION SECTION
-# -------------------------------------------------
+
 
 st.subheader("🔎 Ask Questions About Your Documents")
 
@@ -248,9 +250,9 @@ if st.button("🤖 Ask AI", type="primary", use_container_width=True):
 else:
     ask_ai_clicked = False
 
-# -------------------------------------------------
+
 # RECOMMENDED QUESTIONS
-# -------------------------------------------------
+
 
 st.subheader("💡 Recommended Questions")
 
@@ -281,9 +283,9 @@ for i, question in enumerate(recommended_questions):
 
     if st.button(question, key=f"recommended_{i}"):
         st.session_state["selected_question"] = question
-# -------------------------------------------------
+
 # CHAT HISTORY
-# -------------------------------------------------
+
 
 if st.session_state["chat_history"]:
 
@@ -297,9 +299,8 @@ if st.session_state["chat_history"]:
         st.write(chat["answer"])
 
         st.markdown("---")
-# -------------------------------------------------
+
 # ASK AI
-# -------------------------------------------------
 
 if ask_ai_clicked:
 
@@ -340,9 +341,9 @@ if ask_ai_clicked:
         })
 
 
-        # -------------------------------------------------
+        
         # ANSWER
-        # -------------------------------------------------
+        
 
         st.markdown("---")
 
@@ -351,9 +352,9 @@ if ask_ai_clicked:
         st.write(answer)
 
 
-            # -------------------------------------------------
+            
         # EXPORT REPORT
-        # -------------------------------------------------
+        
 
         report = f"""
 AI Research & Document Intelligence
@@ -390,9 +391,9 @@ Page: {page_number}
             use_container_width=True
         )
 
-        # -------------------------------------------------
+        
         # SOURCES
-        # -------------------------------------------------
+        
 
         st.subheader("📖 Sources")
 
