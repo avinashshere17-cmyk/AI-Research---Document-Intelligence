@@ -5,3 +5,4 @@ faiss-cpu
 openai
 python-dotenv
 numpy
+google-genai
